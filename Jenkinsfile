@@ -23,10 +23,9 @@ pipeline {
         stage('Upload App Image') {
             steps {
                 script {
-                    docker.withRegistry( vprofileRegistry, registryCredential ) {
-                        dockerImage.push("${BUILD_NUMBER}")
-                        dockerImage.push('latest')
-                    }
+                    // Push the Docker image directly without authentication
+                    sh "docker push ${appRegistry}:${BUILD_NUMBER}"
+                    sh "docker push ${appRegistry}:latest"
                 }
             }
         }
