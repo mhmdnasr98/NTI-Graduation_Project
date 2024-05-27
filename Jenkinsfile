@@ -12,8 +12,6 @@ pipeline {
     }
 
     stages {
-       
-
         stage('Build App Image') {
             steps {
                 script {
@@ -23,11 +21,13 @@ pipeline {
         }
         
         stage('Upload App Image') {
-    steps {
-        script {
-            docker.withRegistry('https://public.ecr.aws/q2p2k2w1', 'awscreds') {
-                dockerImage.push("${BUILD_NUMBER}")
-                dockerImage.push('latest')
+            steps {
+                script {
+                    docker.withRegistry('https://public.ecr.aws/q2p2k2w1', 'awscreds') {
+                        dockerImage.push("${BUILD_NUMBER}")
+                        dockerImage.push('latest')
+                    }
+                }
             }
         }
     }
