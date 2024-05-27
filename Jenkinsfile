@@ -24,7 +24,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/mhmdnasr98/NTI-Graduation_Project.git'
+                git branch: 'main', url: 'git@github.com:mhmdnasr98/NTI-Graduation_Project.git', credentialsId: 'ssh-github'
             }
         }        
         stage('Build App Image') {
