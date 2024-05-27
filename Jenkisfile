@@ -12,14 +12,25 @@ pipeline {
     }
 
     stages {
+        stage('Prepare SSH') {
+            steps {
+                sh '''
+                    mkdir -p ~/.ssh
+                    echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+                    ssh-keyscan github.com >> ~/.ssh/known_hosts
+                '''
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'git@github.com:mhmdnasr98/NTI-Graduation_Project.git'
+            }
+        }        
         stage('Build App Image') {
             steps {
                 script {
-                    def COLOR_MAP = [
-                        'SUCCESS': 'good', 
-                        'FAILURE': 'danger'
-                    ]
-                    dockerImage = docker.build("${appRegistry}:${BUILD_NUMBER}", "./Docker-files/app/")
+                    def dockerImage = docker.build("${appRegistry}:${BUILD_NUMBER}", "./Docker-files/app/")
                 }
             }
         }
