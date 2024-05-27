@@ -16,7 +16,7 @@ pipeline {
             steps {
                 sh '''
                     mkdir -p ~/.ssh
-                    echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+                    echo "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
                     ssh-keyscan github.com >> ~/.ssh/known_hosts
                 '''
             }
@@ -24,7 +24,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'git@github.com:mhmdnasr98/NTI-Graduation_Project.git'
+                git branch: 'main', url: 'https://github.com/mhmdnasr98/NTI-Graduation_Project.git'
             }
         }        
         stage('Build App Image') {
