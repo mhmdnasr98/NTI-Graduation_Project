@@ -8,7 +8,7 @@ pipeline {
     environment {
         registryCredential = 'ecr:us-east-1:awscreds'
         appRegistry = 'public.ecr.aws/q2p2k2w1/vprofileappimeg'
-        vprofileRegistry = "https://public.ecr.aws/q2p2k2w1"
+        awsRegion = 'us-east-1'
     }
 
     stages {
@@ -19,11 +19,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Authenticate Docker with ECR') {
+            steps {
+                script {
+                    sh '''
+                        aws ecr get-login-password --region ${awsRegion} | docker login --username AWS --password-stdin ${appRegistry}
+                    '''
+                }
+            }
+        }
         
         stage('Upload App Image') {
             steps {
                 script {
-                    // Push the Docker image directly without authentication
                     sh "docker push ${appRegistry}:${BUILD_NUMBER}"
                     sh "docker push ${appRegistry}:latest"
                 }
